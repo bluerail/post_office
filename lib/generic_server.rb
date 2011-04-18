@@ -55,7 +55,7 @@ class GenericServer
   # Respond to client by sending back text
   def respond(client, text)
     puts "#{client.object_id}:#{@port} > #{text}"
-    client.puts text
+    client.write text
   rescue
     puts "#{client.object_id}:#{@port} ! #{$!}"
     client.close

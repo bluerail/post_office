@@ -104,7 +104,7 @@ class SMTPServer < GenericServer
   
   # Respond to client using a standard SMTP response code
   def respond(client, code)
-    super(client, "#{code} #{SMTPServer::RESPONSES[code].to_s}")
+    super(client, "#{code} #{SMTPServer::RESPONSES[code].to_s}\r\n")
   end
   
   # Standard SMTP response codes
