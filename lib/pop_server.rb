@@ -1,5 +1,5 @@
-require 'lib/generic_server.rb'
-require 'lib/store.rb'
+require 'generic_server.rb'
+require 'store.rb'
 require 'digest/md5'
 
 # Basic POP server

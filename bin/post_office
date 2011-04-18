@@ -1,6 +1,9 @@
+#!/usr/bin/env ruby
+$LOAD_PATH.unshift File.dirname(__FILE__) + '/../lib'
+
 require 'thread'
-require 'lib/smtp_server.rb'
-require 'lib/pop_server.rb'
+require 'smtp_server.rb'
+require 'pop_server.rb'
 
 begin
   smtp_server = Thread.new{ SMTPServer.new }
