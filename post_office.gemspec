@@ -21,6 +21,7 @@ Gem::Specification.new do |s|
     "Rakefile",
     "VERSION",
     "bin/post_office",
+    "bin/post_officed",
     "lib/generic_server.rb",
     "lib/pop_server.rb",
     "lib/smtp_server.rb",
