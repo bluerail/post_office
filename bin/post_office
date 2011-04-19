@@ -1,9 +1,43 @@
 #!/usr/bin/env ruby
 $LOAD_PATH.unshift File.dirname(__FILE__) + '/../lib'
 
+require 'optparse'
+require 'logger'
 require 'thread'
 require 'smtp_server.rb'
 require 'pop_server.rb'
+
+#
+# Parse command line arguments
+#
+options = {}
+ 
+optparse = OptionParser.new do |opts|
+  opts.banner = "Usage: #{__FILE__} [options]"
+
+  options[:verbose] = false
+  opts.on( '-v', '--verbose', 'Output more information' ) do
+    options[:verbose] = true
+  end
+
+  options[:logfile] = nil
+  opts.on( '-l', '--logfile FILE', 'Write log to FILE. Outputs to STDOUT (or /var/log/post_office.log when daemonized) by default.' ) do |file|
+    options[:logfile] = file
+  end
+
+  opts.on( '-h', '--help', 'Display this screen' ) do
+    puts opts
+    exit
+  end
+end
+
+optparse.parse!
+
+#
+# Create our logger
+#
+$log = Logger.new(options[:logfile] || STDOUT)
+$log.level = options[:verbose] ? Logger::DEBUG : Logger::INFO
 
 begin
   smtp_server = Thread.new{ SMTPServer.new }
@@ -12,7 +46,7 @@ begin
   smtp_server.join
   pop_server.join
 rescue Interrupt
-  puts "Interrupt..."
+  $log.info "Interrupt..."
 rescue Errno::EACCES
-  puts "I need root access to open ports 25 and 110. Please sudo #{__FILE__}"
+  $log.error "I need root access to open ports 25 and 110. Please sudo #{__FILE__}"
 end

@@ -25,12 +25,14 @@ class GenericServer
   def initialize(options)
     @port = options[:port]
     server = TCPServer.open(@port)
-    puts "#{self.class.to_s} listening on port #{@port}"
+    $log.info "#{self.class.to_s} listening on port #{@port}"
     
     # Accept connections until infinity and beyond
     loop do
       Thread.start(server.accept) do |client|
         begin
+          client_addr = client.addr
+          $log.info "#{self.class.to_s} accepted connection #{client.object_id} from #{client_addr.inspect}"
           greet client
 
           # Keep processing commands until somebody closed the connection
@@ -40,12 +42,13 @@ class GenericServer
             # The first word of a line should contain the command
             command = input.to_s.gsub(/ .*/,"").upcase.gsub(/[\r\n]/,"")
 
-            puts "#{client.object_id}:#{@port} < #{input}"
+            $log.debug "#{client.object_id}:#{@port} < #{input}"
 
             process(client, command, input)
           end until client.closed?
+          $log.info "#{self.class.to_s} closed connection #{client.object_id} with #{client_addr.inspect}"
         rescue => detail
-          puts "#{client.object_id}:#{@port} ! #{$!}"
+          $log.error "#{client.object_id}:#{@port} ! #{$!}"
           client.close
         end
       end
@@ -54,10 +57,10 @@ class GenericServer
   
   # Respond to client by sending back text
   def respond(client, text)
-    puts "#{client.object_id}:#{@port} > #{text}"
+    $log.debug "#{client.object_id}:#{@port} > #{text}"
     client.puts text
   rescue
-    puts "#{client.object_id}:#{@port} ! #{$!}"
+    $log.error "#{client.object_id}:#{@port} ! #{$!}"
     client.close
   end
   
