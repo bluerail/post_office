@@ -12,7 +12,7 @@ begin
     gemspec.description = "A mock SMTP/POP3 server to aid in the development of applications with mail functionality."
     gemspec.authors = ["Rene van Lieshout"]  
     gemspec.bindir = "bin"
-    gemspec.executables = ['post_office']
+    gemspec.executables = ['post_office', 'post_officed']
   end  
 rescue LoadError  
   puts "Jeweler not available. Install it with: sudo gem install jeweler" 

@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+require 'rubygems'
+require 'daemons'
+
+# use /var/log/post_office.log as default logger
+# /var/log/post_office.log
+unless ARGV.include?("-l") || ARGV.include?("--logfile")
+  ARGV.push "--" unless ARGV.include?("--")
+  ARGV.push "--logfile"
+  ARGV.push "/var/log/post_office.log"
+end
+
+Daemons.run(File.dirname(__FILE__) + '/post_office')
