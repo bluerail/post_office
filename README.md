@@ -54,13 +54,23 @@ It's possible to start PostOffice as a daemon using post_officed:
         -h, --help                       Show this message
             --version                    Show version
 
+Mac OS X Startup Item
+---------------------
+
+PostOffice daemon can be started on Mac OS X system startup.
+
+    sudo post_office [options]
+
+    --install-osx-startup-item   Installs Post Office as OS X Startup Item
+    --remove-osx-startup-item    Removes Post Office as OS X Startup Item
+
+The Startup Item is stored in */Library/StartupItems/PostOffice*
+
 Planned features
 ----------------
 
 * Ability to use custom ports for SMTP and POP
 * Growl notifications
-* Mac OS X Startup Item / launchctl service
 * Store mail in tempfiles instead of in-memory array
-* Tests :)
 
 Contributions are welcome! Feel free to fork and send a pull request through Github.

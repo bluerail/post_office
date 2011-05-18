@@ -24,6 +24,14 @@ optparse = OptionParser.new do |opts|
   opts.on( '-l', '--logfile FILE', 'Write log to FILE. Outputs to STDOUT (or /var/log/post_office.log when daemonized) by default.' ) do |file|
     options[:logfile] = file
   end
+  
+  options[:startup_item] = nil
+  opts.on('--install-osx-startup-item', 'Installs Post Office as OS X Startup Item') do
+    options[:startup_item] = :install
+  end
+  opts.on('--remove-osx-startup-item', 'Removes Post Office as OS X Startup Item') do
+    options[:startup_item] = :remove
+  end
 
   opts.on( '-h', '--help', 'Display this screen' ) do
     puts opts
@@ -32,6 +40,18 @@ optparse = OptionParser.new do |opts|
 end
 
 optparse.parse!
+
+#
+# OS X Startup Item
+#
+if options[:startup_item]
+  require 'startup_item.rb'
+  case options[:startup_item]
+    when :install then StartupItem.install
+    when :remove then StartupItem.remove
+  end
+  exit
+end
 
 #
 # Create our logger
