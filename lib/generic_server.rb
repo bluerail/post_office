@@ -26,7 +26,14 @@ class GenericServer
     @port = options[:port]
     server = TCPServer.open(@port)
     $log.info "#{self.class.to_s} listening on port #{@port}"
-    
+
+    # Try to increase the buffer to give us some more time to parse incoming data
+    begin
+      server.setsockopt(Socket::SOL_SOCKET, Socket::SO_RCVBUF, 1024 * 1024)
+    rescue
+      # then try it using our available buffer
+    end
+
     # Accept connections until infinity and beyond
     loop do
       Thread.start(server.accept) do |client|
@@ -45,6 +52,7 @@ class GenericServer
             $log.debug "#{client.object_id}:#{@port} < #{input}"
 
             process(client, command, input)
+
           end until client.closed?
           $log.info "#{self.class.to_s} closed connection #{client.object_id} with #{client_addr.inspect}"
         rescue => detail

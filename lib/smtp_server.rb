@@ -65,6 +65,7 @@ class SMTPServer < GenericServer
   # Markes client sending data
   def data(client)
     set_client_data(client, :sending_data, true)
+    set_client_data(client, :data, "")
     respond(client, 354)
   end
   
@@ -86,7 +87,7 @@ class SMTPServer < GenericServer
       respond(client, 250)
       $log.info "Received mail from #{get_client_data(client, :from).to_s} with recipient #{get_client_data(client, :to).to_s}"
     else
-      set_client_data(client, :data, get_client_data(client, :data).to_s + full_data)
+      self.client_data[client.object_id][:data] << full_data
     end
   end
   
