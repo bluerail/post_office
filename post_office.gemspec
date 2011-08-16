@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{post_office}
-  s.version = "0.3.0"
+  s.version = "0.3.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Rene van Lieshout"]
-  s.date = %q{2011-05-18}
+  s.date = %q{2011-08-16}
   s.description = %q{A mock SMTP/POP3 server to aid in the development of applications with mail functionality.}
   s.email = %q{rene@bluerail.nl}
   s.executables = ["post_office", "post_officed"]
@@ -37,7 +37,7 @@ Gem::Specification.new do |s|
   ]
   s.homepage = %q{http://github.com/bluerail/post_office}
   s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.5.0}
+  s.rubygems_version = %q{1.5.3}
   s.summary = %q{PostOffice mock SMTP/POP3 server}
 
   if s.respond_to? :specification_version then
