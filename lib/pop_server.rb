@@ -6,8 +6,8 @@ require 'digest/md5'
 
 class POPServer < GenericServer
   # Create new server listening on port 110
-  def initialize
-    super(:port => 110)
+  def initialize(port)
+    super(:port => port)
   end
   
   # Send a greeting to client
