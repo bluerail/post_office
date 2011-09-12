@@ -32,7 +32,7 @@ optparse = OptionParser.new do |opts|
 
   options[:pop3_port] = nil
   opts.on( '-pop3', '--pop3 PORT', 'Specify POP3 port to use' ) do |port|
-    options[:smtp_pop3_port] = port
+    options[:pop3_port] = port
   end
   
   options[:startup_item] = nil
