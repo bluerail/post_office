@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{post_office}
-  s.version = "0.3.1"
+  s.version = "0.3.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Rene van Lieshout"]
-  s.date = %q{2011-08-16}
+  s.date = %q{2011-09-13}
   s.description = %q{A mock SMTP/POP3 server to aid in the development of applications with mail functionality.}
   s.email = %q{rene@bluerail.nl}
   s.executables = ["post_office", "post_officed"]
@@ -31,6 +31,8 @@ Gem::Specification.new do |s|
     "pkg/post_office-0.2.0.gem",
     "pkg/post_office-0.2.1.gem",
     "pkg/post_office-0.3.0.gem",
+    "pkg/post_office-0.3.1.gem",
+    "pkg/post_office-0.3.2.gem",
     "post_office.gemspec",
     "startup_item/PostOffice/PostOffice",
     "startup_item/PostOffice/StartupParameters.plist"
