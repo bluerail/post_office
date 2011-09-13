@@ -7,9 +7,9 @@ class SMTPServer < GenericServer
   attr_accessor :client_data
   
   # Create new server listening on port 25
-  def initialize
+  def initialize(port)
     self.client_data = Hash.new
-    super(:port => 25)
+    super(:port => port)
   end
   
   # Send a greeting to client
