@@ -24,6 +24,16 @@ optparse = OptionParser.new do |opts|
   opts.on( '-l', '--logfile FILE', 'Write log to FILE. Outputs to STDOUT (or /var/log/post_office.log when daemonized) by default.' ) do |file|
     options[:logfile] = file
   end
+
+  options[:smtp_port] = nil
+  opts.on( '-smtp', '--smtp PORT', 'Specify SMTP port to use' ) do |port|
+    options[:smtp_port] = port
+  end
+
+  options[:pop3_port] = nil
+  opts.on( '-pop3', '--pop3 PORT', 'Specify POP3 port to use' ) do |port|
+    options[:pop3_port] = port
+  end
   
   options[:startup_item] = nil
   opts.on('--install-osx-startup-item', 'Installs Post Office as OS X Startup Item') do
@@ -60,8 +70,8 @@ $log = Logger.new(options[:logfile] || STDOUT)
 $log.level = options[:verbose] ? Logger::DEBUG : Logger::INFO
 
 begin
-  smtp_server = Thread.new{ SMTPServer.new }
-  pop_server  = Thread.new{ POPServer.new  }
+  smtp_server = Thread.new{ SMTPServer.new(options[:smtp_port] || 25) }
+  pop_server  = Thread.new{ POPServer.new(options[:pop3_port]) || 110 }
 
   smtp_server.join
   pop_server.join
