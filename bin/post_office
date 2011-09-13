@@ -71,7 +71,7 @@ $log.level = options[:verbose] ? Logger::DEBUG : Logger::INFO
 
 begin
   smtp_server = Thread.new{ SMTPServer.new(options[:smtp_port] || 25) }
-  pop_server  = Thread.new{ POPServer.new(options[:pop3_port]) || 110 }
+  pop_server  = Thread.new{ POPServer.new(options[:pop3_port] || 110) }
 
   smtp_server.join
   pop_server.join
