@@ -24,9 +24,12 @@ Usage
     
     -v, --verbose                    Output more information
     -l, --logfile FILE               Write log to FILE. Outputs to STDOUT (or /var/log/post_office.log when daemonized) by default.
+    -s, --smtp PORT                  Specify SMTP port to use
+    -p, --pop3 PORT                  Specify POP3 port to use
+    
     -h, --help                       Display this screen
 
-This starts the service and listens on port 25 and 110. Configure your POP3 client with any username and password.
+This starts the service and listens on the specified ports (or 25 for SMTP and 110 for POP3 by default). Configure your POP3 client with any username and password.
 
 Daemon
 ------

@@ -26,12 +26,12 @@ optparse = OptionParser.new do |opts|
   end
 
   options[:smtp_port] = nil
-  opts.on( '-smtp', '--smtp PORT', 'Specify SMTP port to use' ) do |port|
+  opts.on( '-s', '--smtp PORT', 'Specify SMTP port to use' ) do |port|
     options[:smtp_port] = port
   end
 
   options[:pop3_port] = nil
-  opts.on( '-pop3', '--pop3 PORT', 'Specify POP3 port to use' ) do |port|
+  opts.on( '-p', '--pop3 PORT', 'Specify POP3 port to use' ) do |port|
     options[:pop3_port] = port
   end
   
@@ -78,5 +78,6 @@ begin
 rescue Interrupt
   $log.info "Interrupt..."
 rescue Errno::EACCES
-  $log.error "I need root access to open ports 25 and 110. Please sudo #{__FILE__}"
+  $log.error "I need root access to open ports #{options[:smtp_port] || 25} and / or #{options[:pop3_port] || 110}. Please sudo #{__FILE__}"
 end
+
