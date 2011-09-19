@@ -7,9 +7,9 @@ class SMTPServer < GenericServer
   attr_accessor :client_data
   
   # Create new server listening on port 25
-  def initialize
+  def initialize(port)
     self.client_data = Hash.new
-    super(:port => 25)
+    super(:port => port)
   end
   
   # Send a greeting to client
@@ -45,7 +45,7 @@ class SMTPServer < GenericServer
   # Stores sender address
   def mail_from(client, full_data)
     if /^MAIL FROM:/ =~ full_data.upcase
-      set_client_data(client, :from, full_data.gsub(/^MAIL FROM:/i,""))
+      set_client_data(client, :from, full_data.gsub(/^MAIL FROM:\s*/i,"").gsub(/[\r\n]/,""))
       respond(client, 250)
     else
       respond(client, 500)
@@ -55,7 +55,7 @@ class SMTPServer < GenericServer
   # Stores recepient address
   def rcpt_to(client, full_data)
     if /^RCPT TO:/ =~ full_data.upcase
-      set_client_data(client, :to, full_data.gsub(/^RCPT TO:/i,""))
+      set_client_data(client, :to, full_data.gsub(/^RCPT TO:\s*/i,"").gsub(/[\r\n]/,""))
       respond(client, 250)
     else
       respond(client, 500)
@@ -65,6 +65,7 @@ class SMTPServer < GenericServer
   # Markes client sending data
   def data(client)
     set_client_data(client, :sending_data, true)
+    set_client_data(client, :data, "")
     respond(client, 354)
   end
   
@@ -84,8 +85,9 @@ class SMTPServer < GenericServer
         get_client_data(client, :data).to_s
       )
       respond(client, 250)
+      $log.info "Received mail from #{get_client_data(client, :from).to_s} with recipient #{get_client_data(client, :to).to_s}"
     else
-      set_client_data(client, :data, get_client_data(client, :data).to_s + full_data)
+      self.client_data[client.object_id][:data] << full_data
     end
   end
   

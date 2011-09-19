@@ -1,0 +1,27 @@
+#!/bin/sh
+
+##
+# Post Office Daemon
+##
+
+. /etc/rc.common
+
+StartService ()
+{
+    ConsoleMessage "Starting PostOffice"
+    /usr/bin/post_officed start
+}
+
+StopService ()
+{
+    ConsoleMessage "Stopping PostOffice"
+    /usr/bin/post_officed stop
+}
+
+RestartService ()
+{
+    ConsoleMessage "Restarting PostOffice"
+    /usr/bin/post_officed restart
+}
+
+RunService "$1"
