@@ -68,6 +68,7 @@ end
 #
 $log = Logger.new(options[:logfile] || STDOUT)
 $log.level = options[:verbose] ? Logger::DEBUG : Logger::INFO
+$log.datetime_format = "%H:%M:%S"
 
 begin
   smtp_server = Thread.new{ SMTPServer.new(options[:smtp_port] || 25) }
