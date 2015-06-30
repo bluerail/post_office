@@ -22,6 +22,7 @@ class SMTPServer < GenericServer
     case command
       when 'DATA' then data(client)
       when 'HELO', 'EHLO' then respond(client, 250)
+      when 'NOOP' then respond(client, 250)
       when 'MAIL' then mail_from(client, full_data)
       when 'QUIT' then quit(client)
       when 'RCPT' then rcpt_to(client, full_data)
