@@ -7,30 +7,49 @@ require 'thread'
 require 'smtp_server.rb'
 require 'pop_server.rb'
 
+def config_filename(base_dir)
+  "#{base_dir}/post_office/config.yml"
+end
+
+def config_home
+  ENV.fetch('XDG_CONFIG_HOME', ENV['HOME'] + '/.config')
+end
+
+def detect_config_file
+  local = config_filename(config_home)
+  global = config_filename('/etc')
+  [local, global].detect { |filename| File.exist? filename }
+end
+
+def read_config_file(config_file = detect_config_file)
+  return {} if config_file.nil?
+  YAML.load_file(config_file)
+end
+
 #
 # Parse command line arguments
 #
-options = {}
+options = read_config_file
 
 optparse = OptionParser.new do |opts|
   opts.banner = "Usage: #{__FILE__} [options]"
 
-  options[:verbose] = false
+  options[:verbose] ||= false
   opts.on( '-v', '--verbose', 'Output more information' ) do
     options[:verbose] = true
   end
 
-  options[:logfile] = nil
+  options[:logfile] ||= nil
   opts.on( '-l', '--logfile FILE', 'Write log to FILE. Outputs to STDOUT (or /var/log/post_office.log when daemonized) by default.' ) do |file|
     options[:logfile] = file
   end
 
-  options[:smtp_port] = 25
+  options[:smtp_port] ||= 25
   opts.on( '-s', '--smtp PORT', 'Specify SMTP port to use' ) do |port|
     options[:smtp_port] = port
   end
 
-  options[:pop3_port] = 110
+  options[:pop3_port] ||= 110
   opts.on( '-p', '--pop3 PORT', 'Specify POP3 port to use' ) do |port|
     options[:pop3_port] = port
   end
@@ -39,6 +58,7 @@ optparse = OptionParser.new do |opts|
   opts.on('--install-osx-startup-item', 'Installs Post Office as OS X Startup Item') do
     options[:startup_item] = :install
   end
+
   opts.on('--remove-osx-startup-item', 'Removes Post Office as OS X Startup Item') do
     options[:startup_item] = :remove
   end
