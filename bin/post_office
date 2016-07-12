@@ -11,7 +11,7 @@ require 'pop_server.rb'
 # Parse command line arguments
 #
 options = {}
- 
+
 optparse = OptionParser.new do |opts|
   opts.banner = "Usage: #{__FILE__} [options]"
 
@@ -25,16 +25,16 @@ optparse = OptionParser.new do |opts|
     options[:logfile] = file
   end
 
-  options[:smtp_port] = nil
+  options[:smtp_port] = 25
   opts.on( '-s', '--smtp PORT', 'Specify SMTP port to use' ) do |port|
     options[:smtp_port] = port
   end
 
-  options[:pop3_port] = nil
+  options[:pop3_port] = 110
   opts.on( '-p', '--pop3 PORT', 'Specify POP3 port to use' ) do |port|
     options[:pop3_port] = port
   end
-  
+
   options[:startup_item] = nil
   opts.on('--install-osx-startup-item', 'Installs Post Office as OS X Startup Item') do
     options[:startup_item] = :install
@@ -71,14 +71,14 @@ $log.level = options[:verbose] ? Logger::DEBUG : Logger::INFO
 $log.datetime_format = "%H:%M:%S"
 
 begin
-  smtp_server = Thread.new{ SMTPServer.new(options[:smtp_port] || 25) }
-  pop_server  = Thread.new{ POPServer.new(options[:pop3_port] || 110) }
+  smtp_server = Thread.new{ SMTPServer.new(options[:smtp_port]) }
+  pop_server  = Thread.new{ POPServer.new(options[:pop3_port]) }
 
   smtp_server.join
   pop_server.join
 rescue Interrupt
   $log.info "Interrupt..."
 rescue Errno::EACCES
-  $log.error "I need root access to open ports #{options[:smtp_port] || 25} and / or #{options[:pop3_port] || 110}. Please sudo #{__FILE__}"
+  $log.error "I need root access to open ports #{options[:smtp_port]} and / or #{options[:pop3_port]}. Please sudo #{__FILE__}"
 end
 
