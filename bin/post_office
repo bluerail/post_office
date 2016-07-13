@@ -4,30 +4,11 @@ $LOAD_PATH.unshift File.dirname(__FILE__) + '/../lib'
 require 'optparse'
 require 'logger'
 require 'thread'
-require 'json'
 require 'smtp_server.rb'
 require 'pop_server.rb'
+require 'config_file.rb'
 
-def config_filename(base_dir)
-  "#{base_dir}/post_office/config.json"
-end
-
-def config_home
-  ENV.fetch('XDG_CONFIG_HOME', ENV['HOME'] + '/.config')
-end
-
-def detect_config_file
-  local = config_filename(config_home)
-  global = config_filename('/etc')
-  [local, global].detect { |filename| File.exist? filename }
-end
-
-def read_config_file(config_file = detect_config_file)
-  return {} if config_file.nil?
-  JSON.parse(File.read(config_file), symbolize_names: true)
-end
-
-options = read_config_file
+options = ConfigFile.detect.read
 
 #
 # Parse command line arguments
