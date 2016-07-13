@@ -4,11 +4,12 @@ $LOAD_PATH.unshift File.dirname(__FILE__) + '/../lib'
 require 'optparse'
 require 'logger'
 require 'thread'
+require 'json'
 require 'smtp_server.rb'
 require 'pop_server.rb'
 
 def config_filename(base_dir)
-  "#{base_dir}/post_office/config.yml"
+  "#{base_dir}/post_office/config.json"
 end
 
 def config_home
@@ -23,14 +24,14 @@ end
 
 def read_config_file(config_file = detect_config_file)
   return {} if config_file.nil?
-  YAML.load_file(config_file)
+  JSON.parse(File.read(config_file), symbolize_names: true)
 end
+
+options = read_config_file
 
 #
 # Parse command line arguments
 #
-options = read_config_file
-
 optparse = OptionParser.new do |opts|
   opts.banner = "Usage: #{__FILE__} [options]"
 
