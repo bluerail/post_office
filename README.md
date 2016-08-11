@@ -1,13 +1,6 @@
 PostOffice mock SMTP/POP3 server
 ================================
 
-https://github.com/bluerail/post_office
-
-By Rene van Lieshout <rene@bluerail.nl>
-
-Description
------------
-
 PostOffice is a mock SMTP/POP3 server to accept mails sent from your Rails application when it's running in development. The messages can be retrieved using a standard POP3 client, such as mail.app. Just connect to localhost with any username and password.
 
 Note: Received messages are **not** sent to their final recipient and will remain available until deleted or when the process is quit.
@@ -30,6 +23,13 @@ Usage
     -h, --help                       Display this screen
 
 This starts the service and listens on the specified ports (or 25 for SMTP and 110 for POP3 by default). Configure your POP3 client with any username and password.
+
+Config
+------
+
+Post Office will try to find a configuration file (post_office/config.json) in the user dir ($HOME), and then in /etc. It will load the first one it finds.
+
+The arguments passed on the command line will always override the ones specified in the config file. 
 
 Daemon
 ------
@@ -72,8 +72,26 @@ The Startup Item is stored in */Library/StartupItems/PostOffice*
 Planned features
 ----------------
 
-* Ability to use custom ports for SMTP and POP
-* Growl notifications
 * Store mail in tempfiles instead of in-memory array
 
 Contributions are welcome! Feel free to fork and send a pull request through Github.
+
+## Changelog
+
+### 1.0.0 (Aug 11, 2016)
+
+* [(tijn)](https://github.com/tijn) [load a config file and move default options (to become more DRY)](https://github.com/bluerail/post_office/pull/5)
+* [(gamecreature)](https://github.com/gamecreature) [NOOP smtp command support](https://github.com/bluerail/post_office/pull/4)
+* [(martijn)](https://github.com/martijn) Shorten timestamp in logs
+
+### 0.3.3 (Sep 13, 2011)
+
+* [(sgeorgi)](https://github.com/sgeorgi) [Specifying SMTP and POP3 ports on the command line](https://github.com/bluerail/post_office/pull/2)
+
+### 0.3.2 (Sep 13, 2011)
+
+Broken build
+
+### 0.3.1 (Aug 16, 2011)
+
+* First 'official' release
