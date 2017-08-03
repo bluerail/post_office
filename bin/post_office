@@ -7,6 +7,7 @@ require 'thread'
 require 'smtp_server.rb'
 require 'pop_server.rb'
 require 'config_file.rb'
+require 'store.rb'
 
 options = ConfigFile.detect.read
 
@@ -17,22 +18,27 @@ optparse = OptionParser.new do |opts|
   opts.banner = "Usage: #{__FILE__} [options]"
 
   options[:verbose] ||= false
-  opts.on( '-v', '--verbose', 'Output more information' ) do
+  opts.on('-v', '--verbose', 'Output more information') do
     options[:verbose] = true
   end
 
   options[:logfile] ||= nil
-  opts.on( '-l', '--logfile FILE', 'Write log to FILE. Outputs to STDOUT (or /var/log/post_office.log when daemonized) by default.' ) do |file|
+  opts.on('-l', '--logfile FILE', 'Write log to FILE. Outputs to STDOUT (or /var/log/post_office.log when daemonized) by default.') do |file|
     options[:logfile] = file
   end
 
+  options[:mailbox] ||= false
+  opts.on('-m', '--mailbox', 'Use separate mailboxes') do
+    options[:mailbox] = true
+  end
+
   options[:smtp_port] ||= 25
-  opts.on( '-s', '--smtp PORT', 'Specify SMTP port to use' ) do |port|
+  opts.on('-s', '--smtp PORT', 'Specify SMTP port to use') do |port|
     options[:smtp_port] = port
   end
 
   options[:pop3_port] ||= 110
-  opts.on( '-p', '--pop3 PORT', 'Specify POP3 port to use' ) do |port|
+  opts.on('-p', '--pop3 PORT', 'Specify POP3 port to use') do |port|
     options[:pop3_port] = port
   end
 
@@ -45,7 +51,7 @@ optparse = OptionParser.new do |opts|
     options[:startup_item] = :remove
   end
 
-  opts.on( '-h', '--help', 'Display this screen' ) do
+  opts.on('-h', '--help', 'Display this screen') do
     puts opts
     exit
   end
@@ -59,8 +65,8 @@ optparse.parse!
 if options[:startup_item]
   require 'startup_item.rb'
   case options[:startup_item]
-    when :install then StartupItem.install
-    when :remove then StartupItem.remove
+  when :install then StartupItem.install
+  when :remove then StartupItem.remove
   end
   exit
 end
@@ -70,17 +76,17 @@ end
 #
 $log = Logger.new(options[:logfile] || STDOUT)
 $log.level = options[:verbose] ? Logger::DEBUG : Logger::INFO
-$log.datetime_format = "%H:%M:%S"
+$log.datetime_format = '%H:%M:%S'
 
 begin
-  smtp_server = Thread.new{ SMTPServer.new(options[:smtp_port]) }
-  pop_server  = Thread.new{ POPServer.new(options[:pop3_port]) }
+  Store.instance.mailbox = options[:mailbox]
+  smtp_server = Thread.new { SMTPServer.new(options[:smtp_port]) }
+  pop_server  = Thread.new { POPServer.new(options[:pop3_port]) }
 
   smtp_server.join
   pop_server.join
 rescue Interrupt
-  $log.info "Interrupt..."
+  $log.info 'Interrupt...'
 rescue Errno::EACCES
   $log.error "I need root access to open ports #{options[:smtp_port]} and / or #{options[:pop3_port]}. Please sudo #{__FILE__}"
 end
-

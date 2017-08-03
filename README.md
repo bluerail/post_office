@@ -17,6 +17,7 @@ Usage
     
     -v, --verbose                    Output more information
     -l, --logfile FILE               Write log to FILE. Outputs to STDOUT (or /var/log/post_office.log when daemonized) by default.
+    -m, --mailbox                    Use separate mailboxes
     -s, --smtp PORT                  Specify SMTP port to use
     -p, --pop3 PORT                  Specify POP3 port to use
     
@@ -68,6 +69,13 @@ PostOffice daemon can be started on Mac OS X system startup.
     --remove-osx-startup-item    Removes Post Office as OS X Startup Item
 
 The Startup Item is stored in */Library/StartupItems/PostOffice*
+
+Distinct Mailboxes
+------------------
+
+By default, sent emails are broadcast to all clients connected to the POP3 server. To simulate delivery to specific email addresses, use the `--mailbox` setting. 
+
+When connecting to the POP3 server with the mailbox setting enabled, set the `username` field  to the desired email address. 
 
 Planned features
 ----------------
