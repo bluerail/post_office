@@ -27,9 +27,9 @@ optparse = OptionParser.new do |opts|
     options[:logfile] = file
   end
 
-  options[:mailbox] ||= false
-  opts.on('-m', '--mailbox', 'Use separate mailboxes') do
-    options[:mailbox] = true
+  options[:mailbox] ||= 1
+  opts.on('-m', '--mailbox NUM', 'Use separate mailboxes') do |mailbox|
+    options[:mailbox] = mailbox
   end
 
   options[:smtp_port] ||= 25
@@ -81,8 +81,11 @@ $log.datetime_format = '%H:%M:%S'
 begin
   Store.instance.mailbox = options[:mailbox]
   smtp_server = Thread.new { SMTPServer.new(options[:smtp_port]) }
-  pop_server  = Thread.new { POPServer.new(options[:pop3_port]) }
 
+  options[:mailbox].to_i.times do |i|
+    pop3_port = options[:pop3_port].to_i + i
+    pop_server = Thread.new { POPServer.new(pop3_port) }
+  end
   smtp_server.join
   pop_server.join
 rescue Interrupt

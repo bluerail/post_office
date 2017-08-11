@@ -5,7 +5,7 @@
 
 require 'net/pop'
 
-Net::POP3.start('localhost', 1110, ARGV[0], 'boguspassword') do |pop|
+Net::POP3.start('localhost', ARGV[1], ARGV[0], 'boguspassword') do |pop|
   unless pop.mails.empty?
     pop.each_mail do |mail|
       p mail

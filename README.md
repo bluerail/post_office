@@ -17,7 +17,7 @@ Usage
     
     -v, --verbose                    Output more information
     -l, --logfile FILE               Write log to FILE. Outputs to STDOUT (or /var/log/post_office.log when daemonized) by default.
-    -m, --mailbox                    Use separate mailboxes
+    -m, --mailbox NUM                Use separate mailboxes
     -s, --smtp PORT                  Specify SMTP port to use
     -p, --pop3 PORT                  Specify POP3 port to use
     
@@ -73,7 +73,7 @@ The Startup Item is stored in */Library/StartupItems/PostOffice*
 Distinct Mailboxes
 ------------------
 
-By default, sent emails are broadcast to all clients connected to the POP3 server. To simulate delivery to specific email addresses, use the `--mailbox` setting. 
+By default, sent emails are broadcast to all clients connected to the POP3 server. To simulate delivery to specific email addresses, use the `--mailbox NUM` setting. `NUM` specifies the number of POP3 ports to be opened. The first port number is specified with `--pop3 PORT`, and increments from there. 
 
 When connecting to the POP3 server with the mailbox setting enabled, set the `username` field  to the desired email address. 
 

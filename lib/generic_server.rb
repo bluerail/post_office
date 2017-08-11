@@ -56,6 +56,7 @@ class GenericServer
           $log.info "#{self.class} closed connection #{client.object_id} with #{client_addr.inspect}"
         rescue => detail
           $log.error "#{client.object_id}:#{@port} ! #{$ERROR_INFO}"
+          $log.error detail
           client.close
         end
       end
@@ -68,6 +69,7 @@ class GenericServer
     client.write text
   rescue => detail
     $log.error "#{client.object_id}:#{@port} ! #{$ERROR_INFO}"
+    $log.error detail
     client.close
   end
 end
