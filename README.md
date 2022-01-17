@@ -14,12 +14,12 @@ Usage
 -----
 
     sudo post_office [options]
-    
+
     -v, --verbose                    Output more information
     -l, --logfile FILE               Write log to FILE. Outputs to STDOUT (or /var/log/post_office.log when daemonized) by default.
     -s, --smtp PORT                  Specify SMTP port to use
     -p, --pop3 PORT                  Specify POP3 port to use
-    
+
     -h, --help                       Display this screen
 
 This starts the service and listens on the specified ports (or 25 for SMTP and 110 for POP3 by default). Configure your POP3 client with any username and password.
@@ -29,7 +29,7 @@ Config
 
 Post Office will try to find a configuration file (post_office/config.json) in the user dir ($HOME), and then in /etc. It will load the first one it finds.
 
-The arguments passed on the command line will always override the ones specified in the config file. 
+The arguments passed on the command line will always override the ones specified in the config file.
 
 Daemon
 ------
@@ -77,6 +77,10 @@ Planned features
 Contributions are welcome! Feel free to fork and send a pull request through Github.
 
 ## Changelog
+
+### 1.0.1 (Jan 17, 2022)
+
+* [(snoutmate)](https://github.com/snoutmate) [Added SMTP AUTH support](https://github.com/bluerail/post_office/pull/7)
 
 ### 1.0.0 (Aug 11, 2016)
 

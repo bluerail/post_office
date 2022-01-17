@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "post_office"
-  s.version = "1.0.0"
+  s.version = "1.0.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Rene van Lieshout"]
-  s.date = "2016-08-11"
+  s.date = "2022-01-17"
   s.description = "A mock SMTP/POP3 server to aid in the development of applications with mail functionality."
   s.email = "rene@bluerail.nl"
   s.executables = ["post_office", "post_officed"]
