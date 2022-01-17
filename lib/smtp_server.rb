@@ -27,6 +27,7 @@ class SMTPServer < GenericServer
       when 'QUIT' then quit(client)
       when 'RCPT' then rcpt_to(client, full_data)
       when 'RSET' then rset(client)
+      when 'AUTH' then auth(client)
       else begin
         if get_client_data(client, :sending_data)
           append_data(client, full_data)
@@ -75,6 +76,11 @@ class SMTPServer < GenericServer
     self.client_data[client.object_id] = Hash.new
   end
   
+  # Authenticates client
+  def auth(client)
+    respond(client, 235)
+  end
+
   # Adds full_data to incoming mail message
   #
   # We'll store the mail when full_data == "."
@@ -121,6 +127,7 @@ class SMTPServer < GenericServer
     214 => "Help message",
     220 => "Bluerail Post Office Service ready",
     221 => "Bluerail Post Office Service closing transmission channel",
+    235 => "Authentication successful",
     421 => "Bluerail Post Office Service not available,",
     250 => "Requested mail action okay, completed",
     251 => "User not local; will forward to <forward-path>",
